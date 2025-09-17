@@ -1,0 +1,37 @@
+{
+  "name": "smart-contractors",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "test:workescrow": "npx hardhat test test/WorkEscrow.ts",
+    "deploy:local": "npx hardhat run scripts/deploy-workescrow.ts",
+    "deploy:sepolia": "npx hardhat run scripts/deploy-workescrow.ts --network sepolia",
+    "interact:local": "npx hardhat run scripts/interact-workescrow.ts",
+    "interact:sepolia": "npx hardhat run scripts/interact-workescrow.ts --network sepolia",
+    "node": "npx hardhat node",
+    "clean": "npx hardhat clean",
+    "typechain": "npx hardhat compile && npx typechain --target ethers-v6 --out-dir typechain-types './artifacts/contracts/**/*.json'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ignition": "^3.0.3",
+    "@nomicfoundation/hardhat-toolbox-mocha-ethers": "^3.0.0",
+    "@openzeppelin/contracts": "^5.4.0",
+    "@types/chai": "^4.3.20",
+    "@types/chai-as-promised": "^8.0.2",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^22.18.1",
+    "chai": "^5.3.3",
+    "ethers": "^6.15.0",
+    "forge-std": "github:foundry-rs/forge-std#v1.9.4",
+    "hardhat": "^2.19.0",
+    "mocha": "^11.7.2",
+    "typescript": "~5.8.0"
+  },
+  "type": "module"
+}
