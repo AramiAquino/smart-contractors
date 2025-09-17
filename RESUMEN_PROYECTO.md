@@ -40,7 +40,7 @@ SISTEMA → Paga automáticamente al worker
 **🎯 COMPLETADO AL 100%:**
 - ✅ Smart Contract WorkEscrow funcional
 - ✅ Token de prueba MockERC20  
-- ✅ Tests exhaustivos (35+ casos)
+- ✅ Tests funcionales (10 casos principales)
 - ✅ Scripts de deploy y interacción
 - ✅ Documentación completa
 - ✅ Guías paso a paso
@@ -68,7 +68,7 @@ SISTEMA → Paga automáticamente al worker
 **Blockchain:** Ethereum + Sepolia Testnet
 **Smart Contracts:** Solidity 0.8.28 + OpenZeppelin 5.4.0
 **Development:** Hardhat 2.19.0 + TypeScript 5.8.0
-**Testing:** Mocha + Chai + 35+ test cases
+**Testing:** Mocha + Chai + 10 test cases funcionales
 **Security:** ReentrancyGuard + Pausable + Access Control
 **Standards:** ERC20 (USDC) + Gas optimizations
 
@@ -80,7 +80,7 @@ SISTEMA → Paga automáticamente al worker
 - **Pausable** → Funciones de emergencia
 - **Access Control** → Solo usuarios autorizados
 - **SafeERC20** → Transferencias seguras
-- **Testing Completo** → 35+ escenarios probados
+- **Testing Funcional** → 10 escenarios principales probados
 
 ---
 

@@ -19,6 +19,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.1.0",
     "@nomicfoundation/hardhat-ignition": "^3.0.3",
     "@nomicfoundation/hardhat-toolbox-mocha-ethers": "^3.0.0",
     "@openzeppelin/contracts": "^5.4.0",
@@ -31,7 +32,7 @@
     "forge-std": "github:foundry-rs/forge-std#v1.9.4",
     "hardhat": "^2.19.0",
     "mocha": "^11.7.2",
+    "ts-node": "^10.9.2",
     "typescript": "~5.8.0"
-  },
-  "type": "module"
+  }
 }

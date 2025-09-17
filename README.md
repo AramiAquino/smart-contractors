@@ -1,63 +1,83 @@
-# 🎯 WorkEscrow - Plataforma de Trabajos Digitales con Pago Seguro
+# WorkEscrow - Plataforma de Trabajos Digitales con Pago Seguro
 
-> **¿Qué es esto?** Un sistema que permite contratar y pagar trabajos digitales de forma 100% segura usando tecnología blockchain. El dinero se queda "guardado" hasta que el trabajo esté completado satisfactoriamente.
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.28-blue.svg)](https://soliditylang.org/)
+[![Hardhat](https://img.shields.io/badge/Hardhat-2.19.0-yellow.svg)](https://hardhat.org/)
+[![License](https://img.shields.io/badge/License-ISC-green.svg)](https://opensource.org/licenses/ISC)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.0-blue.svg)](https://www.typescriptlang.org/)
+
+> **WorkEscrow** es un sistema de escrow descentralizado que permite contratar y pagar trabajos digitales de forma segura usando tecnología blockchain. Los fondos se mantienen en custodia hasta que el trabajo sea completado y aprobado por ambas partes.
+
+## Tabla de Contenidos
+
+- [Problema a Resolver](#problema-a-resolver)
+- [Cómo Funciona](#cómo-funciona)
+- [Inicio Rápido](#inicio-rápido)
+- [Para Desarrolladores](#para-desarrolladores)
+- [Stack Tecnológico](#stack-tecnológico)
+- [Estructura del Proyecto](#estructura-del-proyecto)
+- [Seguridad](#seguridad)
+- [Contribuir](#contribuir)
+- [Licencia](#licencia)
 
 ---
 
-## 🌟 ¿Por Qué Existe Este Proyecto?
+## Problema a Resolver
 
-### El Problema Actual
-Imagina que quieres contratar a alguien para que te haga una página web:
-- 🤔 **¿Cómo sabes que no te va a estafar?**
-- 💸 **¿Y si pagas y nunca entrega el trabajo?**
-- ⚖️ **¿Y si el trabajador hace todo bien pero no le pagas?**
+### Desafíos Actuales en el Mercado de Trabajo Digital
+El mercado de freelancing digital enfrenta problemas significativos de confianza y seguridad en pagos:
 
-### La Solución: WorkEscrow
-WorkEscrow es como un **"cajero automático inteligente"** que:
-- 🔒 **Guarda tu dinero** cuando contratas a alguien
-- ✋ **No permite que nadie lo toque** hasta que el trabajo esté listo
-- ✅ **Solo libera el pago** cuando tú apruebes la entrega
-- 🚫 **Protege a ambas partes** de estafas
+- **Riesgo de Pago**: Los clientes arriesgan pagar por trabajo que puede nunca entregarse
+- **Riesgo de No Pago**: Los trabajadores arriesgan completar trabajo sin garantía de pago
+- **Resolución de Disputas**: Falta de mecanismos transparentes y automatizados de resolución
+- **Barreras de Confianza**: Altas barreras de entrada debido a problemas de confianza entre partes desconocidas
+
+### Nuestra Solución: WorkEscrow
+WorkEscrow proporciona un sistema de escrow descentralizado que:
+
+- **Asegura Pagos**: Los fondos se mantienen en contratos inteligentes hasta completar el trabajo
+- **Automatiza Flujo de Trabajo**: Gestión transparente y automatizada del estado del trabajo
+- **Elimina Intermediarios**: Transacciones directas peer-to-peer con ejecución por contrato inteligente
+- **Garantiza Equidad**: Ambas partes están protegidas mediante garantías criptográficas
 
 ---
 
-## 📱 ¿Cómo Funciona? (Explicación Simple)
+## Cómo Funciona
 
-### 👥 Los Actores
+### Arquitectura del Sistema
 
-**🙋‍♂️ CLIENTE** - La persona que necesita un trabajo
-**👨‍💻 TRABAJADOR** - La persona que hace el trabajo  
-**🤖 CONTRATO INTELIGENTE** - El "cajero automático" que guarda el dinero
+**Cliente** - Parte que solicita que se complete un trabajo
+**Trabajador** - Parte que realiza el trabajo solicitado
+**Contrato Inteligente** - Sistema de escrow automatizado que gestiona fondos y flujo de trabajo
 
-### 🔄 El Flujo Paso a Paso
+### Proceso de Flujo de Trabajo
 
 ```
-1. 📋 CLIENTE crea trabajo
-   "Necesito una página web por $500"
-   💰 Deposita $500 en el contrato
+1. CREACIÓN DE TRABAJO
+   El cliente crea una solicitud de trabajo con monto de pago
+   Los fondos se depositan en el contrato inteligente de escrow
 
-2. 🤝 TRABAJADOR acepta
-   "Acepto hacer tu página web"
-   📝 El trabajo pasa a "En Progreso"
+2. ACEPTACIÓN DE TRABAJO
+   El trabajador acepta la asignación de trabajo
+   El estado del trabajo cambia a "En Progreso"
 
-3. 📤 TRABAJADOR entrega
-   "Aquí está tu página web terminada"
-   🔗 Sube el link de la entrega
+3. ENTREGA DE TRABAJO
+   El trabajador entrega el trabajo completado con datos de entrega
+   El estado del trabajo cambia a "Entregado"
 
-4. ✅ CLIENTE revisa y aprueba
-   "Me gusta, está aprobado"
-   💸 El dinero se libera automáticamente al trabajador
+4. APROBACIÓN DE TRABAJO
+   El cliente revisa y aprueba el trabajo entregado
+   Los fondos se liberan automáticamente al trabajador
 
-5. 🎉 ¡COMPLETADO!
-   Ambas partes están satisfechas y protegidas
+5. COMPLETADO
+   La transacción está completa y registrada en blockchain
 ```
 
-### 🛡️ ¿Por Qué Es Seguro?
+### Características de Seguridad
 
-- **🔐 Tu dinero está en blockchain**: No puede desaparecer
-- **👁️ Todo es transparente**: Todas las acciones son públicas y verificables
-- **⚡ Pagos automáticos**: No hay humanos que puedan robar
-- **📝 Historial permanente**: Todo queda registrado para siempre
+- **Seguridad Blockchain**: Los fondos están asegurados por garantías criptográficas
+- **Transparencia**: Todas las transacciones son públicamente verificables
+- **Automatización**: Ningún intermediario humano puede manipular el proceso
+- **Inmutabilidad**: Todas las acciones están permanentemente registradas y son auditables
 
 ---
 
@@ -80,23 +100,53 @@ WorkEscrow es como un **"cajero automático inteligente"** que:
 ### Instalación Rápida
 
 ```bash
-git clone <tu-repositorio>
+# 1. Clonar el repositorio
+git clone https://github.com/AramiAquino/smart-contractors.git
 cd smart-contractors
+
+# 2. Instalar dependencias
 npm install
+
+# 3. Instalar dependencia adicional si es necesaria
+npm install --save-dev ts-node --legacy-peer-deps
+
+# 4. Compilar contratos
 npm run compile
+
+# 5. Ejecutar tests
 npm run test
+
+# 6. Deployar contratos localmente
+npm run deploy:local
+
+# 7. Interactuar con los contratos
+npm run interact:local
 ```
 
 ### Scripts Principales
 
 ```bash
-npm run test:workescrow    # Probar el contrato
-npm run deploy:local       # Deploy local 
-npm run interact:local     # Probar funcionamiento
+# Testing
+npm run test                    # Todos los tests
+npm run test:workescrow        # Solo tests de WorkEscrow
+
+# Deploy
+npm run deploy:local           # Deploy en red local hardhat
+npm run deploy:sepolia         # Deploy en Sepolia testnet
+
+# Interacción
+npm run interact:local         # Probar funcionamiento local
+npm run interact:sepolia       # Probar funcionamiento en Sepolia
+
+# Utilidades
+npm run compile               # Compilar contratos
+npm run clean                # Limpiar artifacts
+npm run node                 # Iniciar nodo local hardhat
 ```
 
 **📚 Documentación técnica completa:** [`DOCUMENTACION_COMPLETA.md`](./DOCUMENTACION_COMPLETA.md)
 **🛠️ Stack tecnológico detallado:** [`TECNOLOGIAS_DETALLADAS.md`](./TECNOLOGIAS_DETALLADAS.md)
+**🎨 Integración frontend:** [`INTEGRACION_FRONTEND.md`](./INTEGRACION_FRONTEND.md)
 
 ---
 
@@ -108,6 +158,7 @@ npm run interact:local     # Probar funcionamiento
 - **🛡️ OpenZeppelin 5.4.0** - Librerías de seguridad auditadas
 - **📘 TypeScript 5.8.0** - Type safety y mejor desarrollo
 - **🔗 Ethers.js 6.15.0** - Interacción con blockchain
+- **🔌 Hardhat Ethers 3.1.0** - Plugin para integración con ethers
 
 ### **Blockchain & Networks**
 - **🌐 Ethereum** - Blockchain principal
@@ -123,9 +174,9 @@ npm run interact:local     # Probar funcionamiento
 
 ### **Testing & Quality**
 - **🧪 Mocha + Chai** - Framework de testing
-- **📊 35+ Test Cases** - Cobertura completa
+- **📊 10 Test Cases** - Cobertura completa de funcionalidades principales
 - **🔍 Gas Optimization** - Costos optimizados
-- **✅ 100% Coverage** - Todo el código probado
+- **✅ Funcionalidades Probadas** - Todos los flujos principales funcionan
 
 **🔧 ¿Quieres los detalles técnicos?** Ver [`TECNOLOGIAS_DETALLADAS.md`](./TECNOLOGIAS_DETALLADAS.md)
 
@@ -155,7 +206,7 @@ smart-contractors/
 - **📊 Estados claros**: Created → InProgress → Submitted → Completed
 - **💰 Pagos automáticos**: Sin intermediarios humanos
 - **🛡️ Seguridad robusta**: ReentrancyGuard, Pausable, Access Control
-- **🎯 Testing completo**: 35+ casos de prueba
+- **🎯 Testing funcional**: 10 casos de prueba cubriendo flujos principales
 - **📝 Eventos detallados**: Historial completo de acciones
 
 ---
@@ -165,8 +216,11 @@ smart-contractors/
 ### Para Usuarios (Sin Conocimiento Técnico)
 👉 **[DOCUMENTACION_COMPLETA.md](./DOCUMENTACION_COMPLETA.md)** - Guía paso a paso súper detallada
 
-### Para Desarrolladores  
+### Para Desarrolladores
 👉 **Clona el repo** y ejecuta `npm run test:workescrow`
+
+### Para Desarrolladores Frontend
+👉 **[INTEGRACION_FRONTEND.md](./INTEGRACION_FRONTEND.md)** - Guía completa de integración con React/Vue/Angular
 
 ### Para Curiosos
 👉 **Ve directamente a [remix.ethereum.org](https://remix.ethereum.org)** y prueba el contrato
@@ -183,12 +237,35 @@ smart-contractors/
 
 ---
 
-## 📄 Licencia
+## Contribuir
 
-ISC - Libre para usar, modificar y distribuir.
+¡Damos la bienvenida a las contribuciones a WorkEscrow! 
+
+### Configuración de Desarrollo
+1. Haz fork del repositorio
+2. Crea una rama de funcionalidad (`git checkout -b feature/funcionalidad-increible`)
+3. Confirma tus cambios (`git commit -m 'Agregar funcionalidad increíble'`)
+4. Envía a la rama (`git push origin feature/funcionalidad-increible`)
+5. Abre un Pull Request
+
+### Pautas de Contribución
+- Sigue los estándares de código existentes
+- Incluye tests para nueva funcionalidad
+- Actualiza la documentación según sea necesario
+- Asegúrate de que todos los tests pasen
+
+## Licencia
+
+Este proyecto está licenciado bajo la Licencia ISC - consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+## Agradecimientos
+
+- Construido con el framework [Hardhat](https://hardhat.org/)
+- Patrones de seguridad de [OpenZeppelin](https://openzeppelin.com/)
+- Testing en [Sepolia Testnet](https://sepolia.etherscan.io/)
 
 ---
 
-**🚀 ¡WorkEscrow - Trabajos digitales seguros para todos!**
+**WorkEscrow - Plataforma Segura de Trabajo Digital**
 
-**¿Tienes 5 minutos?** [Pruébalo en Remix ahora mismo →](https://remix.ethereum.org)
+[Pruébalo ahora en Remix IDE →](https://remix.ethereum.org)

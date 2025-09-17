@@ -102,27 +102,39 @@
 ### Instalación
 
 ```bash
-# Clonar proyecto
-git clone <tu-repositorio>
+# 1. Clonar proyecto
+git clone https://github.com/AramiAquino/smart-contractors.git
 cd smart-contractors
 
-# Instalar dependencias
+# 2. Instalar dependencias básicas
 npm install
 
-# Compilar contratos
+# 3. Instalar dependencia adicional si es necesaria
+npm install --save-dev ts-node --legacy-peer-deps
+
+# 4. Compilar contratos
 npm run compile
+
+# 5. Ejecutar tests
+npm run test
+
+# 6. Deployar contratos localmente
+npm run deploy:local
+
+# 7. Interactuar con los contratos
+npm run interact:local
 ```
 
 ### Scripts Disponibles
 
 ```bash
 # Testing
-npm run test                    # Todos los tests
+npm run test                    # Todos los tests (10 tests funcionales)
 npm run test:workescrow        # Solo tests de WorkEscrow
 
 # Deploy local
-npm run deploy:local           # Deploy en red local
-npm run interact:local         # Interactuar con contrato local
+npm run deploy:local           # Deploy en red local hardhat
+npm run interact:local         # Interactuar con contrato local (flujo completo)
 
 # Deploy Sepolia testnet
 npm run deploy:sepolia         # Deploy en Sepolia (requiere .env)
@@ -131,7 +143,34 @@ npm run interact:sepolia       # Interactuar en Sepolia
 # Utilidades
 npm run compile               # Compilar contratos
 npm run clean                # Limpiar artifacts
-npm run node                 # Iniciar red local
+npm run node                 # Iniciar nodo local hardhat
+
+# Scripts específicos que funcionan
+npx hardhat test test/SimpleTest.js    # Test simple en JavaScript
+npx hardhat run scripts/deploy-workescrow.js  # Deploy con script JavaScript
+
+# Nota importante sobre scripts:
+# - Los scripts .js funcionan inmediatamente
+# - Los scripts .ts requieren configuración TypeScript adicional
+# - Para desarrollo, usar scripts .js es más confiable
+```
+
+### Flujo de Trabajo Recomendado
+
+```bash
+# 1. Configuración inicial (solo una vez)
+npm install
+npm install --save-dev ts-node --legacy-peer-deps
+
+# 2. Desarrollo diario
+npm run compile              # Compilar después de cambios
+npm run test                 # Verificar que todo funciona
+npm run deploy:local         # Deploy para testing
+npm run interact:local       # Probar funcionalidad
+
+# 3. Para testing en blockchain real
+npm run deploy:sepolia       # Deploy en Sepolia
+npm run interact:sepolia     # Probar en testnet
 ```
 
 ### Configuración para Sepolia
@@ -213,6 +252,74 @@ WorkCancelled(workId, client)
 
 ### MockERC20 no aparece en deploy
 **Solución:** Verificar compilación, usar la versión simple incluida
+
+---
+
+## 🔧 Problemas de Configuración Local
+
+### Error: "ts-node is not installed"
+```bash
+# Solución:
+npm install --save-dev ts-node @types/node --legacy-peer-deps
+```
+
+### Error: "Cannot read properties of undefined (reading 'getContractFactory')"
+**Causa:** Plugin de ethers no se carga correctamente
+
+**Solución:**
+```bash
+# 1. Verificar hardhat.config.cjs
+cat hardhat.config.cjs
+# Debe incluir: require("@nomicfoundation/hardhat-ethers");
+# Nota: hardhat-ethers ya está incluido en hardhat-toolbox-mocha-ethers
+```
+
+### Error: "require() cannot be used on an ESM graph"
+**Causa:** Conflicto entre ESM y CommonJS
+
+**Solución:**
+```bash
+# 1. Verificar package.json NO tiene "type": "module"
+# 2. Usar hardhat.config.cjs (no .ts)
+# 3. Usar sintaxis CommonJS en scripts
+```
+
+### Error: "0 passing (0ms)" en tests
+**Causa:** Tests en TypeScript no se ejecutan correctamente
+
+**Solución:**
+```bash
+# 1. Crear test simple en JavaScript
+echo 'const { expect } = require("chai");
+const { ethers } = require("hardhat");
+
+describe("Simple Test", function () {
+  it("Should pass", function () {
+    expect(true).to.be.true;
+  });
+});' > test/SimpleTest.js
+
+# 2. Ejecutar test
+npx hardhat test test/SimpleTest.js
+```
+
+### Error: "ERESOLVE could not resolve"
+**Causa:** Conflictos de dependencias
+
+**Solución:**
+```bash
+# Usar --legacy-peer-deps para resolver conflictos
+npm install --save-dev <paquete> --legacy-peer-deps
+```
+
+### Error: "HH404: File forge-std/Test.sol not found"
+**Causa:** Archivo de test de Foundry en proyecto de Hardhat
+
+**Solución:**
+```bash
+# Eliminar archivos de Foundry
+rm contracts/Counter.t.sol
+```
 
 ---
 

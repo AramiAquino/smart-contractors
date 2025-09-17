@@ -19,13 +19,13 @@ async function main() {
     console.log("✅ MockERC20 deployed to:", await mockUSDC.getAddress());
 
     // Deploy WorkEscrow
-    console.log("�� Deploying WorkEscrow...");
+    console.log(" Deploying WorkEscrow...");
     const workEscrow = await WorkEscrow.deploy(await mockUSDC.getAddress());
     await workEscrow.waitForDeployment();
     console.log("✅ WorkEscrow deployed to:", await workEscrow.getAddress());
 
     console.log("🎉 Deployment completed successfully!");
-    console.log("�� Contract addresses:");
+    console.log(" Contract addresses:");
     console.log("  MockERC20:", await mockUSDC.getAddress());
     console.log("  WorkEscrow:", await workEscrow.getAddress());
   } catch (error) {

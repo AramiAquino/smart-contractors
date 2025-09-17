@@ -89,7 +89,7 @@ Framework de desarrollo más popular para Ethereum. Es como "Create React App" p
 
 **Funcionalidades que usamos:**
 ```javascript
-// hardhat.config.ts
+// hardhat.config.cjs
 networks: {
   sepolia: {
     url: process.env.SEPOLIA_RPC_URL,
@@ -134,12 +134,12 @@ await expect(workEscrow.connect(hacker).approveWork(1))
 ```
 
 **Cobertura de testing:**
-- ✅ **35+ casos de prueba**
+- ✅ **10 casos de prueba funcionales**
 - ✅ **Happy path completo**
-- ✅ **Error cases exhaustivos**
+- ✅ **Funcionalidades principales**
 - ✅ **Access control**
 - ✅ **State transitions**
-- ✅ **Edge cases**
+- ✅ **Deployment y configuración**
 
 ---
 
@@ -263,10 +263,12 @@ enum WorkStatus {
 ```json
 {
   "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.1.0",
     "@nomicfoundation/hardhat-toolbox-mocha-ethers": "^3.0.0",
     "@openzeppelin/contracts": "^5.4.0",
     "ethers": "^6.15.0",
     "hardhat": "^2.19.0",
+    "ts-node": "^10.9.2",
     "typescript": "~5.8.0"
   }
 }
