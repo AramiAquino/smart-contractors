@@ -3,7 +3,7 @@ const router = express.Router();
 const userService = require('../services/userService');
 
 // GET /users
-router.get('/users', (req, res) => {
+router.get('/', (req, res) => {
   userService.listUsers((err, users) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(users);
@@ -11,7 +11,7 @@ router.get('/users', (req, res) => {
 });
 
 // POST /users
-router.post('/users', (req, res) => {
+router.post('/', (req, res) => {
   const { name } = req.body;
   userService.addUser(name, (err, user) => {
     if (err) return res.status(400).json({ error: err.message });

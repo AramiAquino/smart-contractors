@@ -109,136 +109,18 @@ El backend estará disponible en [http://localhost:3000](http://localhost:3000).
 
 ## Ejecutar con Docker
 
-### Contenedor Individual
+### Opción Recomendada: Docker Compose
 
-1. Construir la imagen:
-
-~~~bash
-docker build -t backend-sqlite .
-~~~
-
-2. Levantar el contenedor con persistencia de datos:
+Con la configuración actual, **un solo comando** levanta todo el backend:
 
 ~~~bash
-docker run -p 3000:3000 -v $(pwd)/data:/usr/src/app/data backend-sqlite
+docker-compose up
 ~~~
 
 El backend estará disponible en [http://localhost:3000](http://localhost:3000).
 
-### Docker Compose
-
-Levantar el backend usando Compose:
-
-~~~bash
-docker-compose up --build
-~~~
-
-El backend estará disponible en [http://localhost:3000](http://localhost:3000).
-
-**Ventaja:** Docker Compose simplifica la gestión de volúmenes y permite agregar servicios futuros de forma modular.
-
-
-# Inspección de Datos SQLite en Contenedor Docker
-
-Esta guía te permite verificar y explorar los datos almacenados en tu base de datos SQLite dentro del contenedor Docker.
-
-## 📋 Verificación Rápida de Datos
-
-### 1. Verificar que el contenedor está ejecutándose
-
-```bash
-docker ps
-```
-
-Busca el contenedor `backend-sqlite` en la lista de contenedores activos.
-
-### 2. Listar archivos de la base de datos
-
-```bash
-docker exec backend-sqlite ls -la /usr/src/app/data/
-```
-
-Esto mostrará el archivo `database.db` y su información.
-
-### 3. Ver las tablas disponibles
-
-```bash
-docker exec backend-sqlite sqlite3 /usr/src/app/data/database.db ".tables"
-```
-
-### 4. Ver la estructura de una tabla
-
-```bash
-docker exec backend-sqlite sqlite3 /usr/src/app/data/database.db ".schema users"
-```
-
-### 5. Consultar todos los datos
-
-```bash
-docker exec backend-sqlite sqlite3 /usr/src/app/data/database.db "SELECT * FROM users;"
-```
-
-## �� Exploración Interactiva
-
-### Acceder al contenedor con shell interactivo
-
-```bash
-docker exec -it backend-sqlite sh
-```
-
-### Navegar a la carpeta de datos
-
-```bash
-cd /usr/src/app/data
-```
-
-### Abrir SQLite interactivamente
-
-```bash
-sqlite3 database.db
-```
-
-### Comandos SQLite útiles
-
-```sql
--- Ver todas las tablas
-.tables
-
--- Ver estructura de una tabla
-.schema users
-
--- Consultar datos
-SELECT * FROM users;
-
--- Contar registros
-SELECT C
-
-
-
-## 🛠️ Comandos de Mantenimiento
-
-### Hacer backup de la base de datos
-
-```bash
-docker exec backend-sqlite sqlite3 /usr/src/app/data/database.db ".backup /usr/src/app/data/backup.db"
-```
-
-### Verificar integridad de la base de datos
-
-```bash
-docker exec backend-sqlite sqlite3 /usr/src/app/data/database.db "PRAGMA integrity_check;"
-```
-
-### Ver estadísticas de la base de datos
-
-```bash
-docker exec backend-sqlite sqlite3 /usr/src/app/data/database.db "PRAGMA table_info(users);"
-```
-
-## 📝 Notas Importantes
-
-- Los datos persisten gracias al volumen mapeado en `docker-compose.yml`
-- La base de datos se encuentra en `/usr/src/app/data/database.db` dentro del contenedor
-- Puedes acceder a los datos tanto desde el contenedor como desde el host (carpeta `./data`)
-- Los comandos sin `-it` funcionan mejor en scripts automatizados
-- Usa `-it` solo cuando necesites interacción manual con SQLite
+**Comandos útiles:**
+- `docker-compose up --build` - Reconstruir imagen si hay cambios
+- `docker-compose up -d` - Ejecutar en background
+- `docker-compose logs -f` - Ver logs en tiempo real
+- `docker-compose down` - Parar el servicio

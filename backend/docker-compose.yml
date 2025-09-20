@@ -7,3 +7,5 @@ services:
       - "3000:3000"  # mapa puerto local → contenedor
     volumes:
       - ./data:/data  # persistencia de la base SQLite
+    environment:
+      - NODE_ENV=production
