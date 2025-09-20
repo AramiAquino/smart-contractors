@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  backend:
+    build: .
+    container_name: backend-sqlite
+    ports:
+      - "3000:3000"  # mapa puerto local → contenedor
+    volumes:
+      - ./data:/data  # persistencia de la base SQLite
