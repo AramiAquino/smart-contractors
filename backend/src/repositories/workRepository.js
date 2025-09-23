@@ -25,16 +25,16 @@ const getWorkByBlockchainId = (blockchainWorkId, callback) => {
   });
 };
 
-const getWorksByClient = (clientAddress, callback) => {
-  db.all("SELECT * FROM works WHERE client_address = ? ORDER BY created_at DESC", [clientAddress], (err, rows) => {
+const getWorksByClient = (clientId, callback) => {
+  db.all("SELECT * FROM works WHERE client_id = ? ORDER BY created_at DESC", [clientId], (err, rows) => {
     if (err) return callback(err);
     const works = rows.map(row => Work.fromDB(row));
     callback(null, works);
   });
 };
 
-const getWorksByWorker = (workerAddress, callback) => {
-  db.all("SELECT * FROM works WHERE worker_address = ? ORDER BY created_at DESC", [workerAddress], (err, rows) => {
+const getWorksByWorker = (workerId, callback) => {
+  db.all("SELECT * FROM works WHERE worker_id = ? ORDER BY created_at DESC", [workerId], (err, rows) => {
     if (err) return callback(err);
     const works = rows.map(row => Work.fromDB(row));
     callback(null, works);
@@ -43,36 +43,34 @@ const getWorksByWorker = (workerAddress, callback) => {
 
 const createWork = (workData, callback) => {
   const {
-    clientAddress,
-    workerAddress,
+    clientId,
+    workerId,
     amount,
     title,
     description,
-    status,
+    statusId,
+    createdAt,
     deadline,
-    deliveryData,
-    blockchainTxHash,
-    blockchainWorkId
+    deliveryData
   } = workData;
 
   const sql = `
     INSERT INTO works (
-      client_address, worker_address, amount, title, description, 
-      status, deadline, delivery_data, blockchain_tx_hash, blockchain_work_id
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      client_id, worker_id, amount, title, description, 
+      status_id, created_at, deadline, delivery_data
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const params = [
-    clientAddress,
-    workerAddress,
+    clientId,
+    workerId,
     amount,
     title,
     description,
-    status,
+    statusId,
+    createdAt,
     deadline,
-    deliveryData,
-    blockchainTxHash,
-    blockchainWorkId
+    deliveryData
   ];
 
   db.run(sql, params, function(err) {
@@ -87,9 +85,18 @@ const updateWork = (id, updateData, callback) => {
   const fields = [];
   const values = [];
 
+  // Mapear campos de JavaScript a campos de base de datos
+  const fieldMapping = {
+    clientId: 'client_id',
+    workerId: 'worker_id',
+    statusId: 'status_id',
+    deliveryData: 'delivery_data'
+  };
+
   Object.keys(updateData).forEach(key => {
     if (updateData[key] !== undefined) {
-      fields.push(`${key} = ?`);
+      const dbField = fieldMapping[key] || key;
+      fields.push(`${dbField} = ?`);
       values.push(updateData[key]);
     }
   });
@@ -110,8 +117,8 @@ const updateWork = (id, updateData, callback) => {
   });
 };
 
-const updateWorkStatus = (id, status, callback) => {
-  db.run("UPDATE works SET status = ? WHERE id = ?", [status, id], function(err) {
+const updateWorkStatus = (id, statusId, callback) => {
+  db.run("UPDATE works SET status_id = ? WHERE id = ?", [statusId, id], function(err) {
     if (err) return callback(err);
     if (this.changes === 0) {
       return callback(new Error('Work not found'));

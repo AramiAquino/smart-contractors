@@ -2,36 +2,12 @@ const express = require('express');
 const router = express.Router();
 const workService = require('../services/workService');
 
-// Middleware para validar dirección de wallet
-const validateAddress = (req, res, next) => {
-  const { clientAddress, workerAddress } = req.body;
-  
-  if (clientAddress && !isValidEthereumAddress(clientAddress)) {
-    return res.status(400).json({ 
-      error: 'Invalid client address format' 
-    });
-  }
-  
-  if (workerAddress && !isValidEthereumAddress(workerAddress)) {
-    return res.status(400).json({ 
-      error: 'Invalid worker address format' 
-    });
-  }
-  
-  next();
-};
-
-// Función para validar dirección Ethereum
-function isValidEthereumAddress(address) {
-  return /^0x[a-fA-F0-9]{40}$/.test(address);
-}
-
 // POST /works - Crear un nuevo trabajo
-router.post('/', validateAddress, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const {
-      clientAddress,
-      workerAddress,
+      clientId,
+      workerId,
       amount,
       title,
       description,
@@ -39,8 +15,8 @@ router.post('/', validateAddress, async (req, res) => {
     } = req.body;
 
     // Validaciones básicas
-    if (!clientAddress) {
-      return res.status(400).json({ error: 'Client address is required' });
+    if (!clientId) {
+      return res.status(400).json({ error: 'Client ID is required' });
     }
     if (!amount || amount <= 0) {
       return res.status(400).json({ error: 'Amount must be greater than 0' });
@@ -53,8 +29,8 @@ router.post('/', validateAddress, async (req, res) => {
     }
 
     const work = await workService.createWork({
-      clientAddress,
-      workerAddress,
+      clientId: parseInt(clientId),
+      workerId: workerId ? parseInt(workerId) : null,
       amount: parseFloat(amount),
       title: title.trim(),
       description: description.trim(),
@@ -122,16 +98,16 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// GET /works/client/:address - Obtener trabajos por cliente
-router.get('/client/:address', async (req, res) => {
+// GET /works/client/:id - Obtener trabajos por cliente
+router.get('/client/:id', async (req, res) => {
   try {
-    const { address } = req.params;
+    const clientId = parseInt(req.params.id);
     
-    if (!isValidEthereumAddress(address)) {
-      return res.status(400).json({ error: 'Invalid address format' });
+    if (isNaN(clientId)) {
+      return res.status(400).json({ error: 'Invalid client ID' });
     }
 
-    const works = await workService.getWorksByClient(address);
+    const works = await workService.getWorksByClient(clientId);
     res.json({
       success: true,
       data: works
@@ -145,16 +121,16 @@ router.get('/client/:address', async (req, res) => {
   }
 });
 
-// GET /works/worker/:address - Obtener trabajos por worker
-router.get('/worker/:address', async (req, res) => {
+// GET /works/worker/:id - Obtener trabajos por worker
+router.get('/worker/:id', async (req, res) => {
   try {
-    const { address } = req.params;
+    const workerId = parseInt(req.params.id);
     
-    if (!isValidEthereumAddress(address)) {
-      return res.status(400).json({ error: 'Invalid address format' });
+    if (isNaN(workerId)) {
+      return res.status(400).json({ error: 'Invalid worker ID' });
     }
 
-    const works = await workService.getWorksByWorker(address);
+    const works = await workService.getWorksByWorker(workerId);
     res.json({
       success: true,
       data: works
@@ -169,20 +145,20 @@ router.get('/worker/:address', async (req, res) => {
 });
 
 // POST /works/:id/accept - Aceptar trabajo
-router.post('/:id/accept', validateAddress, async (req, res) => {
+router.post('/:id/accept', async (req, res) => {
   try {
     const workId = parseInt(req.params.id);
-    const { workerAddress } = req.body;
+    const { workerId } = req.body;
 
     if (isNaN(workId)) {
       return res.status(400).json({ error: 'Invalid work ID' });
     }
 
-    if (!workerAddress) {
-      return res.status(400).json({ error: 'Worker address is required' });
+    if (!workerId) {
+      return res.status(400).json({ error: 'Worker ID is required' });
     }
 
-    const work = await workService.acceptWork(workId, workerAddress);
+    const work = await workService.acceptWork(workId, parseInt(workerId));
     res.json({
       success: true,
       message: 'Work accepted successfully',
@@ -199,10 +175,10 @@ router.post('/:id/accept', validateAddress, async (req, res) => {
 });
 
 // POST /works/:id/submit - Entregar trabajo
-router.post('/:id/submit', validateAddress, async (req, res) => {
+router.post('/:id/submit', async (req, res) => {
   try {
     const workId = parseInt(req.params.id);
-    const { deliveryData, workerAddress } = req.body;
+    const { deliveryData, workerId } = req.body;
 
     if (isNaN(workId)) {
       return res.status(400).json({ error: 'Invalid work ID' });
@@ -212,11 +188,11 @@ router.post('/:id/submit', validateAddress, async (req, res) => {
       return res.status(400).json({ error: 'Delivery data is required' });
     }
 
-    if (!workerAddress) {
-      return res.status(400).json({ error: 'Worker address is required' });
+    if (!workerId) {
+      return res.status(400).json({ error: 'Worker ID is required' });
     }
 
-    const work = await workService.submitWork(workId, deliveryData, workerAddress);
+    const work = await workService.submitWork(workId, deliveryData, parseInt(workerId));
     res.json({
       success: true,
       message: 'Work submitted successfully',
@@ -233,20 +209,20 @@ router.post('/:id/submit', validateAddress, async (req, res) => {
 });
 
 // POST /works/:id/approve - Aprobar trabajo
-router.post('/:id/approve', validateAddress, async (req, res) => {
+router.post('/:id/approve', async (req, res) => {
   try {
     const workId = parseInt(req.params.id);
-    const { clientAddress } = req.body;
+    const { clientId } = req.body;
 
     if (isNaN(workId)) {
       return res.status(400).json({ error: 'Invalid work ID' });
     }
 
-    if (!clientAddress) {
-      return res.status(400).json({ error: 'Client address is required' });
+    if (!clientId) {
+      return res.status(400).json({ error: 'Client ID is required' });
     }
 
-    const work = await workService.approveWork(workId, clientAddress);
+    const work = await workService.approveWork(workId, parseInt(clientId));
     res.json({
       success: true,
       message: 'Work approved successfully',
@@ -263,20 +239,20 @@ router.post('/:id/approve', validateAddress, async (req, res) => {
 });
 
 // POST /works/:id/cancel - Cancelar trabajo
-router.post('/:id/cancel', validateAddress, async (req, res) => {
+router.post('/:id/cancel', async (req, res) => {
   try {
     const workId = parseInt(req.params.id);
-    const { clientAddress } = req.body;
+    const { clientId } = req.body;
 
     if (isNaN(workId)) {
       return res.status(400).json({ error: 'Invalid work ID' });
     }
 
-    if (!clientAddress) {
-      return res.status(400).json({ error: 'Client address is required' });
+    if (!clientId) {
+      return res.status(400).json({ error: 'Client ID is required' });
     }
 
-    const work = await workService.cancelWork(workId, clientAddress);
+    const work = await workService.cancelWork(workId, parseInt(clientId));
     res.json({
       success: true,
       message: 'Work cancelled successfully',
@@ -285,34 +261,6 @@ router.post('/:id/cancel', validateAddress, async (req, res) => {
 
   } catch (error) {
     console.error('Error cancelling work:', error);
-    res.status(500).json({
-      success: false,
-      error: error.message || 'Internal server error'
-    });
-  }
-});
-
-// GET /balance/:address - Obtener balance USDC
-router.get('/balance/:address', async (req, res) => {
-  try {
-    const { address } = req.params;
-    
-    if (!isValidEthereumAddress(address)) {
-      return res.status(400).json({ error: 'Invalid address format' });
-    }
-
-    const balance = await workService.getUSDCBalance(address);
-    res.json({
-      success: true,
-      data: {
-        address,
-        balance: balance,
-        currency: 'USDC'
-      }
-    });
-
-  } catch (error) {
-    console.error('Error getting balance:', error);
     res.status(500).json({
       success: false,
       error: error.message || 'Internal server error'
