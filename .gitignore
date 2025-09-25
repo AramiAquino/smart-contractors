@@ -1,9 +1,9 @@
 # Node modules
 /node_modules
-/backend/node_modules
+/backend/node_modules/
 
 # Data backend
-/backend/data
+/backend/data/
 
 # Compilation output
 /dist
