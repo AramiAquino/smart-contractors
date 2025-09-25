@@ -40,8 +40,8 @@ db.serialize(() => {
 
   db.run(`
     INSERT INTO users (name, email, password) VALUES
-    ('Alice', 'alice@mail.com', 'hashed_pass1'),
-    ('Bob',   'bob@mail.com',   'hashed_pass2');
+    ('Alice', 'alice@mail.com', 'hashed_pass3'),
+    ('Bob',   'bob@mail.com',   'hashed_pass4');
   `); 
 
   db.run(`
